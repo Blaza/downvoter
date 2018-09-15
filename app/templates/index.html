@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Downvoter</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+      .red { color: firebrick;}
+      .green { color: forestgreen;}
+      .sk-rotating-plane {
+        width: 40px;
+        height: 40px;
+        margin: auto;
+        background-color: tomato;
+        animation: sk-rotating-plane 1.2s infinite ease-in-out;
+        margin: 30px auto;
+      }
+
+      @keyframes sk-rotating-plane {
+        0% {
+          transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+          background-color: tomato;
+        }
+        50% {
+          transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+          background-color: mediumseagreen;
+        }
+        100% {
+          transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+          background-color: tomato;
+        }
+      }
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>Downvoter <span class="small">Simon Cowell of StackOverflow</span></h1>
+                <!--<h1>Downvoter <span class="small">StackOverflow</span></h1>-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label for="title">Question title:</label>
+                    <input type="text" class="form-control" id="title" placeholder="Write your question title here" />
+                    <label for="reputation">Your reputation</label>
+                    <input type="number" class="form-control" id="reputation" value="1" />
+                </div>
+                <div class="form-group">
+                    <label for="editor">Your question:</label>
+                    <textarea class="form-control" id="editor" rows="10" placeholder="Write your question here using Markdown syntax"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="preview">Question preview:</label>
+                    <div id="preview"></div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+              <div style="margin: 25px auto;">
+                <button id="check_btn" type="button" class="btn btn-primary", onclick="check_score();">Rate the question!</button>
+                <div style="display: none;" id="loading":>
+                  <div class="sk-rotating-plane"></div>
+                  <div style="margin: 10px auto; text-align: center;">Thinking about it...</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+                <label>Badness results:</label>
+                <div class="well">
+                    <h4 style="font-weight: bold;">The verdict:</h4>
+                    <div>
+                      <span id="verdict" style="font-size: 60px; margin-left: 20px; float: left;" class="glyphicon glyphicon-hand-right"></span>
+                      <span id="verdict-message" style="margin-left:10px; line-height:60px; font-size:24px;"></span>
+                    </div>
+                    <div style="margin-top: 15px; font-weight: bold;">Badness score: <span id="BS"></span><span style="font-weight:normal" class="small"> (over 0.275 is bad)</span></div>
+                  <hr />
+                  <div><h4><b>How I saw the question:</b></h4>
+                    <label for="proc_title">Title:</label><div id="proc_title"></div>
+                    <label for="proc_body">Body:</label><div id="proc_body"></div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        var converter = new showdown.Converter();
+
+        var check_score = function() {
+          document.getElementById("check_btn").style.display = "none";
+          document.getElementById("loading").style.display = "block";
+
+          $.post( "score",
+                  { body : document.getElementById("preview").innerHTML,
+                    title : document.getElementById("title").value,
+                    reputation : document.getElementById("reputation").value })
+            .done(function(data) {
+              if (data.verdict == 0) {
+                  document.getElementById("verdict").className = "glyphicon glyphicon-thumbs-up green";
+                  document.getElementById("verdict-message").className = "green";
+                  document.getElementById("verdict-message").innerHTML = "Seems fine.";
+              } else {
+                  document.getElementById("verdict").className = "glyphicon glyphicon-thumbs-down red";
+                  document.getElementById("verdict-message").className = "red";
+                  document.getElementById("verdict-message").innerHTML = "Not impressed.";
+              }
+              document.getElementById("BS").innerHTML = data.BS;
+              document.getElementById("proc_body").innerHTML = data.proc_body;
+              document.getElementById("proc_title").innerHTML = data.proc_title;
+
+              document.getElementById("check_btn").style.display = "";
+              document.getElementById("loading").style.display = "none";
+            });
+        }
+
+        setInterval(function() {
+            var q_markdown = document.getElementById("editor").value;
+            var q_preview = converter.makeHtml(q_markdown);
+            var target = document.getElementById("preview");
+
+            target.innerHTML = q_preview;
+
+        }, 1000);
+    </script>
+</body>
+
+</html>
