@@ -3,7 +3,7 @@ StackOverflow question quality assessment. A project for the machine learning co
 
 ## Quick overview of the model
 
-The aim was to develop a model which, given a StackOverflow question, decides whether it is a 'bad' question or not. In other words, decides if the question should be downvoted. We deem the question 'bad' if it's score is negative.
+The aim was to develop a model which, given a StackOverflow question, decides whether it is a 'bad' question or not. In other words, decides if the question should be downvoted. We'll deem the question 'bad' if it's score is negative.
 
 The developed model has two layers.
 
@@ -17,5 +17,15 @@ The developed model has two layers.
     * The word count of the question body,
     * The reputation of the user posting the question.
 
-The dataset used is the StackOverflow data available at https://archive.org/download/stackexchange (only 'Posts' and 'Users' were used). We used 'Post' data from 01.01.2016. to the end (somewhere around June 2018).
+The dataset used is the StackOverflow data available at https://archive.org/download/stackexchange (only 'Posts' and 'Users' were used). I used 'Post' data from 01.01.2016. to the end (somewhere around June 2018).
 
+The dataset used is very large and also the models created are quite big in size (~800MB) and so I didn't upload them to Github, given the finitude of the human lifespan.
+
+## A demo app
+
+I developed a simple Flask web app to demonstrate the decisions made by the model.  
+
+It is available at http://downvoter.duckdns.org:8387 and the usage is simple.
+
+First, you write a question just like you would on StackOverflow, i.e. write a title, write the body (markdown include), and possibly add the StackOverflow reputation of the user posting.
+Then click on the button "Rate the question!" and the downvoter will think about the question and give it's verdict, along with the "badness score", which is the model's probability estimate (the threshold value is set at 0.275).
