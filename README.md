@@ -1,5 +1,7 @@
 # Downvoter
-StackOverflow question quality assessment. A project for the machine learning course at the Faculty of Mathematics in Belgrade.
+StackOverflow question quality assessment.
+
+A project for the machine learning course at the Faculty of Mathematics in Belgrade.
 
 ## Quick overview of the model
 
@@ -39,3 +41,4 @@ Then click on the button "Rate the question!" and the downvoter will think about
 ***OR***
 
 The easiest way is to click on "Fetch from StackOverflow?", paste a StackOverflow URL of a question and click on "Fetch" which will populate all fields in a couple of seconds. Then run "Rate the question!" and wait for the results.
+
