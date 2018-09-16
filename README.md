@@ -19,7 +19,7 @@ The developed model has two layers.
 
 The dataset used is the StackOverflow data available at https://archive.org/download/stackexchange (only 'Posts' and 'Users' were used). I used 'Post' data from 01.01.2016. to the end (somewhere around June 2018).
 
-The dataset used is very large and also the models created are quite big in size (~800MB) and so I didn't upload them to Github, given the finitude of the human lifespan.
+The dataset used is very large and also the models created are quite big in size (~800MB) and so I didn't upload them to Github, given the finiteness of the human lifespan and the limits of the upload bandwidth.
 
 ## A demo app
 
