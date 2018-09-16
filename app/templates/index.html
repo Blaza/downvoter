@@ -17,6 +17,16 @@
         margin: 30px auto;
       }
 
+      .thinking {
+        animation: thinking 1.2s infinite ease-in-out;
+        animation-delay: 100ms;
+        font-weight: bold;
+        font-size: 1.2em;
+        color: tomato;
+        margin: 10px auto;
+        text-align: center;
+      }
+
       @keyframes sk-rotating-plane {
         0% {
           transform: perspective(120px) rotateX(0deg) rotateY(0deg);
@@ -29,6 +39,17 @@
         100% {
           transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
           background-color: tomato;
+        }
+      }
+      @keyframes thinking {
+        0% {
+          color: tomato;
+        }
+        50% {
+          color: mediumseagreen;
+        }
+        100% {
+          color: tomato;
         }
       }
 
@@ -82,7 +103,7 @@
                 <button id="check_btn" type="button" class="btn btn-primary", onclick="check_score();">Rate the question!</button>
                 <div style="display: none;" id="loading":>
                   <div class="sk-rotating-plane"></div>
-                  <div style="margin: 10px auto; text-align: center;">Thinking about it...</div>
+                  <div style="" class="thinking">Thinking about it...</div>
                 </div>
               </div>
             </div>
@@ -141,9 +162,13 @@
           $.post( "scrape",
                   { url : document.getElementById("so_url").value })
             .done(function(data) {
-              document.getElementById("editor").value = converter.makeMarkdown(data.body_html);
-              document.getElementById("title").value = data.title;
-              document.getElementById("reputation").value = parseInt(data.reputation.replace(/,/g, ''));
+              if (data == "invalid url") {
+                alert("Not a StackOverflow URL!")
+              } else {
+                document.getElementById("editor").value = converter.makeMarkdown(data.body_html);
+                document.getElementById("title").value = data.title;
+                document.getElementById("reputation").value = parseInt(data.reputation.replace(/,/g, ''));
+              }
             });
         }
 
