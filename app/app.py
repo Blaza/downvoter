@@ -2,6 +2,11 @@ from flask import Flask
 from flask import render_template, request, jsonify
 from ..model_scripts.flask_final_model import predict_proba
 from ..model_scripts.preprocessing import process_body, process_title
+
+from bs4 import BeautifulSoup
+from urllib.request import urlopen
+from urllib.parse import urlparse
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -25,5 +30,23 @@ def score():
 
     return jsonify(BS="%.3f" % score, verdict=bad,
                    proc_body=proc_body, proc_title=proc_title)
+
+
+@app.route("/scrape", methods=["POST"])
+def scrape():
+    so_link = request.form.get("url", "")
+    hostname = urlparse(so_link).hostname
+    if not hostname == "www.stackoverflow.com" and \
+       not hostname == "stackoverflow.com":
+        return "invalid url"
+
+    html = urlopen(so_link)
+    soup = BeautifulSoup(html, "html5lib")
+
+    body = soup.select(".question  .post-text")[0].decode_contents().strip()
+    title = soup.select("#question-header a.question-hyperlink")[0].get_text()
+    reputation = soup.select(".owner .reputation-score")[0].get_text()
+
+    return jsonify(body_html=body, title=title, reputation=reputation)
 
 

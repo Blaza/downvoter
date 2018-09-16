@@ -49,7 +49,17 @@
         </div>
         <div class="row">
             <div class="col-lg-6">
-                <div class="form-group">
+              <a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Fetch from StackOverflow?
+              </a>
+              <div class="collapse" id="collapseExample">
+                  <form class="form-inline">
+                    <label for="so_url">URL:</label>
+                    <input type="text" class="form-control" id="so_url" style="margin-left: 5px; width:80%;" placeholder="https://stackoverflow.com/questions/...">
+                    <button type="button" class="btn btn-link" onclick="scrape_question();">Fetch</button>
+                  </form>
+              </div>
+                <div class="form-group" style="margin-top: 10px;">
                     <label for="title">Question title:</label>
                     <input type="text" class="form-control" id="title" placeholder="Write your question title here" />
                     <label for="reputation">Your reputation</label>
@@ -66,7 +76,7 @@
                 </div>
             </div>
             <div class="col-lg-2">
-              <div style="margin: 25px auto;">
+              <div style="margin: 32px auto;">
                 <button id="check_btn" type="button" class="btn btn-primary", onclick="check_score();">Rate the question!</button>
                 <div style="display: none;" id="loading":>
                   <div class="sk-rotating-plane"></div>
@@ -74,7 +84,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-4" style="margin-top: 20px;">
                 <label>Badness results:</label>
                 <div class="well">
                     <h4 style="font-weight: bold;">The verdict:</h4>
@@ -122,6 +132,16 @@
 
               document.getElementById("check_btn").style.display = "";
               document.getElementById("loading").style.display = "none";
+            });
+        }
+
+        var scrape_question = function() {
+          $.post( "scrape",
+                  { url : document.getElementById("so_url").value })
+            .done(function(data) {
+              document.getElementById("editor").value = converter.makeMarkdown(data.body_html);
+              document.getElementById("title").value = data.title;
+              document.getElementById("reputation").value = parseInt(data.reputation.replace(/,/g, ''));
             });
         }
 
