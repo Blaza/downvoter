@@ -21,6 +21,12 @@ The dataset used is the StackOverflow data available at https://archive.org/down
 
 The dataset used is very large and also the models created are quite big in size (~800MB) and so I didn't upload them to Github, given the finiteness of the human lifespan and the limits of the upload bandwidth.
 
+Only the scripts which were used to train and arrive at the models are commited and are located in the `model_scripts`directory. The scripts were run in a sequence like this:
+
+    process_data -> train_word_models -> vectorize_classifier_data -> eval_classifiers ->
+    train_best_word_model -> vectorize_best_classifier_data -> train_best_classifier ->
+    vectorize_logistic_data -> eval_logistic -> train_best_logistic
+
 ## A demo app
 
 I developed a simple Flask web app to demonstrate the decisions made by the model.  
@@ -30,6 +36,6 @@ It is available at http://downvoter.duckdns.org:8387 and the usage is simple:
 First, you write a question just like you would on StackOverflow, i.e. write a title, write the body (markdown supported), and possibly add the StackOverflow reputation of the user posting.
 Then click on the button "Rate the question!" and the downvoter will think about the question and give it's verdict, along with the "badness score", which is the model's probability estimate (the threshold value is set at 0.275).
 
-**OR**
+***OR***
 
 The easiest way is to click on "Fetch from StackOverflow?", paste a StackOverflow URL of a question and click on "Fetch" which will populate all fields in a couple of seconds. Then run "Rate the question!" and wait for the results.
