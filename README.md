@@ -33,7 +33,7 @@ Only the scripts which were used to train and arrive at the models are commited 
 
 I developed a simple Flask web app to demonstrate the decisions made by the model.  
 
-It is available at http://downvoter.duckdns.org:8387 and the usage is simple:
+It is available (upon request) at http://downvoter.duckdns.org:8387 and the usage is simple:
 
 First, you write a question just like you would on StackOverflow, i.e. write a title, write the body (markdown supported), and possibly add the StackOverflow reputation of the user posting.
 Then click on the button "Rate the question!" and the downvoter will think about the question and give it's verdict, along with the "badness score", which is the model's probability estimate (the threshold value is set at 0.275).
